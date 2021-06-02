@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\AlternatifNilai;
+use App\Models\Alternatif;
+use App\Models\KriteriaSub;
+use App\Models\Kriteria;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 
@@ -14,9 +17,13 @@ class AlternatifNilaiController extends Controller
     }
 
     public function index() {
+
         return view('alternatif_nilai.index', [
             'alternatif_nilai' => AlternatifNilai::orderBy('alternatif_nilai_id', 'asc')->get(),
-            'judul' => 'Alternatif Nilai'
+            'judul' => 'Alternatif Nilai',
+            'alternatif' => Alternatif::all(),
+            'kriteria' => Kriteria::all(),
+            'kriteria_sub' => KriteriaSub::all()
         ]);
     }
 
