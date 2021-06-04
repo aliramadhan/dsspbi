@@ -35,7 +35,6 @@ Route::resource('kriteria', KriteriaController::class);
 Route::resource('kriteria_sub', KriteriaSubController::class);
 Route::resource('alternatif', AlternatifController::class);
 Route::resource('alternatif_nilai', AlternatifNilaiController::class);
-Route::resource('user', UserController::class);
 Route::resource('pb_kriteria', PbKriteriaController::class);
 Route::resource('pb_kriteria_sub', PbKriteriaSubController::class)->except(['show']);
 

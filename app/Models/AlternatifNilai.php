@@ -14,4 +14,10 @@ class AlternatifNilai extends Model
     public $timestamps = false;
     protected $table = 'alternatif_nilai';
     protected $primaryKey = 'alternatif_nilai_id';
+    protected $fillable = [
+    	'alternatif_nilai_id',
+    	'alternatif_id',
+    	'kriteria_sub_id',
+    	'alternatif_nilai'  
+    ];
 }

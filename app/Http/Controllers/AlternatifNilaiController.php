@@ -41,22 +41,30 @@ class AlternatifNilaiController extends Controller
     }
 
     public function edit($id) {
-        return view('alternatif_nilai.edit', [
-            'data' => AlternatifNIlai::findOrFail(Crypt::decrypt($id))
-        ]);
+        //decrypt id
+        $id = Crypt::decryptString($id);
+        $alternatif = Alternatif::findOrFail($id);
+        $subkriteria = KriteriaSub::orderBy('kriteria_sub_id')->get();
+        $judul = 'Nilai Alternatif '.$alternatif->alternatif_nama;
+        return view('alternatif_nilai.edit',compact('alternatif','subkriteria','judul'));
     }
 
     public function update(Request $request, $id) {
-        $alternatif_nilai = AlternatifNilai::findOrFail(Crypt::decrypt($id));
-        $alternatif_nilai->alternatif_nilai_nama = $request->alternatif_nilai_nama;
-        $alternatif_nilai->alternatif_nilai_tahun = $request->alternatif_nilai_tahun;
-        $alternatif_nilai->save();
+        $id = Crypt::decryptString($id);
+        $subkriteria = KriteriaSub::orderBy('kriteria_sub_id')->get();
+        foreach ($subkriteria as $item) {
+            $alternatif_nilai = AlternatifNilai::create([
+                'alternatif_id' => $id,
+                'kriteria_sub_id' => $item->kriteria_sub_id,
+                'alternatif_nilai' => $request->input($item->kriteria_sub_id)
+            ]);
+        }
 
         return redirect()->route('alternatif_nilai.index');
     }
 
     public function destroy($id) {
-        AlternatifNilai::findOrFail(Crypt::decrypt($id))->delete();
+        AlternatifNilai::findOrFail(Crypt::encryptString($id))->delete();
         return redirect()->route('alternatif_nilai.index');
 
     }

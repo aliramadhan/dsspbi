@@ -16,4 +16,8 @@ class Alternatif extends Model
     {
         return $this->hasMany(KriteriaSub::class, 'alternatif_id', 'alternatif_id');
     }
+    public function nilai_sub_kriteria()
+    {
+        return $this->hasMany(AlternatifNilai::class, 'alternatif_id', 'alternatif_id');
+    }
 }
