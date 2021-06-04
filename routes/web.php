@@ -6,6 +6,7 @@ use App\Http\Controllers\KriteriaController;
 use App\Http\Controllers\KriteriaSubController;
 //use App\Http\Controllers\user_controller;
 use App\Http\Controllers\PbKriteriaController;
+use App\Http\Controllers\HitungController;
 use App\Http\Controllers\PbKriteriaSubController;
 use Illuminate\Support\Facades\Route;
 
@@ -37,6 +38,7 @@ Route::resource('alternatif', AlternatifController::class);
 Route::resource('alternatif_nilai', AlternatifNilaiController::class);
 Route::resource('pb_kriteria', PbKriteriaController::class);
 Route::resource('pb_kriteria_sub', PbKriteriaSubController::class)->except(['show']);
+Route::resource('hitung', HitungController::class)->except(['show','edit','update','create','store']);
 
 Route::get('pb_kriteria_sub/search', [PbKriteriaSubController::class, 'search'])->name('pb_kriteria.search');
 
