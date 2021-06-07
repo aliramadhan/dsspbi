@@ -16,10 +16,11 @@
         <div class="card card-body">
             
 	        <h3 class="text-uppercase"><b>Hasil konversi nilai perbandingan berpasangan</b></h3>
+	      
 	        <div class="table-responsive">
 	        	<!-- table kriteria -->
-	            <table class="table text-center" >
-	            	<thead class="bg-primary" style="border-radius:10px; letter-spacing: 0.5px;">
+	            <table class="table">
+	            	<thead>
 	            		<tr>
 	            			<th>Kriteria</th>
 	            			@foreach($kriteria as $setKriteria)
@@ -31,10 +32,10 @@
 	            			<th>Kali Bobot</th>
 	            		</tr>
 	            	</thead>
-	            	<tbody >
+	            	<tbody>
 	            		@foreach($kriteria as $setKriteria)
 	            			<tr>
-	            				<th style="background: #3395ff;color: #fff;">{{$setKriteria->kriteria_kode}}</th>
+	<th style="background: #3395ff;color: #fff;">{{$setKriteria->kriteria_kode}}</th>
 	            				@foreach($setKriteria->perbandingan_kriteria as $pb_kriteria)
 	            				<th class="text-secondary">{{number_format($pb_kriteria->nilai->perbandingan_nilai,3)}}</th>
 	            				@endforeach
@@ -43,7 +44,10 @@
 	            				<th class="">{{number_format($setKriteria->akar_krit,3)}}</th>
 	            				<th class="text-warning" style="background: #222f3e">{{number_format($setKriteria->norm_bobot,3)}}</th>
 	            				<th class="text-secondary">{{number_format($setKriteria->kali_bobot,3)}}</th>
+	            		
 	            		@endforeach
+	            		<tr>
+	            		</tr>
 	            	</tbody>
 	            </table>
 	            </div>

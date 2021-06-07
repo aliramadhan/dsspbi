@@ -52,7 +52,6 @@ class KriteriaController extends Controller
         $kriteria->kriteria_keterangan = $request->kriteria_keterangan;
         $kriteria->kriteria_atribut = $request->kriteria_atribut;
         $kriteria->save();
-
         return redirect()->route('kriteria.index');
     }
 

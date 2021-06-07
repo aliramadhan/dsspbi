@@ -53,9 +53,10 @@ class AlternatifNilaiController extends Controller
         $id = Crypt::decryptString($id);
         $subkriteria = KriteriaSub::orderBy('kriteria_sub_id')->get();
         foreach ($subkriteria as $item) {
-            $alternatif_nilai = AlternatifNilai::create([
+            $alternatif_nilai = AlternatifNilai::updateOrCreate([
                 'alternatif_id' => $id,
                 'kriteria_sub_id' => $item->kriteria_sub_id,
+            ],[
                 'alternatif_nilai' => $request->input($item->kriteria_sub_id)
             ]);
         }
