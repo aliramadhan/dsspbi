@@ -37,6 +37,8 @@
 	            				<th>{{$setKriteria->kali_bobot}}</th>
 	            			</tr>
 	            		@endforeach
+	            		<tr>
+	            		</tr>
 	            	</tbody>
 	            </table>
 
