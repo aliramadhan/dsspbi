@@ -44,7 +44,7 @@
 	            <table class="table mt-5 mb-5">
 	            	<thead>
 	            		<tr>
-	            			<th>Sub Kriteria</th>
+	            			<th>Sub Kriteria {{$setKriteria->kriteria_nama}}</th>
 	            			@foreach($setKriteria->kriteria_sub as $setSubKriteria)
 	            				<th>{{$setSubKriteria->kriteria_sub_kode}}</th>
 	            			@endforeach
