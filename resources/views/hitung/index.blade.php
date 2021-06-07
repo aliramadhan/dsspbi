@@ -3,15 +3,19 @@
 {{ $judul }}
 @endsection
 @section('content')
-
+<style type="text/css">
+.table thead th {
+    vertical-align: middle !important;
+    }
+    </style>
 <div class="container">
     <div class="row justify-content-center">
     	<div class="d-flex justify-content-start mb-4">
-                <a href="{{ route('hitung.index') }}?hitung=true" class="btn btn-success shadow-sm mx-auto px-4 text-uppercase"><b>Hitung</b></a>
+                <a href="{{ route('hitung.index') }}?hitung=true" style="letter-spacing:1.5px;" class="btn btn-success shadow-sm mx-auto px-5 py-2 text-uppercase"><b>Hitung</b></a>
 	        </div>
         <div class="card card-body">
             
-	        <h3 class="text-uppercase">Hasil konversi nilai perbandingan berpasangan</h3>
+	        <h3 class="text-uppercase"><b>Hasil konversi nilai perbandingan berpasangan</b></h3>
 	        <div class="table-responsive">
 	        	<!-- table kriteria -->
 	            <table class="table text-center" >
@@ -19,7 +23,7 @@
 	            		<tr>
 	            			<th>Kriteria</th>
 	            			@foreach($kriteria as $setKriteria)
-	            				<th>{{$setKriteria->kriteria_kode}}</th>
+	            				<th style="background: #3395ff;color: #fff;">{{$setKriteria->kriteria_kode}}</th>
 	            			@endforeach
 	            			<th>Kali Krit</th>
 	            			<th>Akar Pangkat Krit</th>
@@ -32,50 +36,55 @@
 	            			<tr>
 	            				<th style="background: #3395ff;color: #fff;">{{$setKriteria->kriteria_kode}}</th>
 	            				@foreach($setKriteria->perbandingan_kriteria as $pb_kriteria)
-	            				<th class="text-secondary">{{$pb_kriteria->nilai->perbandingan_nilai}}</th>
+	            				<th class="text-secondary">{{number_format($pb_kriteria->nilai->perbandingan_nilai,3)}}</th>
 	            				@endforeach
 
-	            				<th class="text-white" style="background:#1dd1a1;">{{$setKriteria->kali_krit}}</th>
-	            				<th class="">{{$setKriteria->akar_krit}}</th>
-	            				<th class="text-warning" style="background: #222f3e">{{$setKriteria->norm_bobot}}</th>
-	            				<th class="text-secondary">{{$setKriteria->kali_bobot}}</th>
+	            				<th class="text-white" style="background:#10ac84;">{{number_format($setKriteria->kali_krit,3)}}</th>
+	            				<th class="">{{number_format($setKriteria->akar_krit,3)}}</th>
+	            				<th class="text-warning" style="background: #222f3e">{{number_format($setKriteria->norm_bobot,3)}}</th>
+	            				<th class="text-secondary">{{number_format($setKriteria->kali_bobot,3)}}</th>
 	            		@endforeach
 	            	</tbody>
 	            </table>
+	            </div>
 
 	            <!-- table subkriteria -->
+	            <h3 class="text-uppercase mt-5"><b>Hasil konversi nilai perbandingan berpasangan</b></h3>
 	            @foreach($kriteria as $setKriteria)
-	            <table class="table mt-5 mb-5">
-	            	<thead>
+	            <h4 class="text-uppercase text-secondary"><b>Sub Kriteria {{$setKriteria->kriteria_nama}}</b></h4>
+	            <div class="table-responsive overflow-auto">
+	            <table class="table text-center mb-5 ">
+	            	<thead class="bg-primary" style="border-radius:10px; letter-spacing: 0.5px;">
 	            		<tr>
-	            			<th>Sub Kriteria {{$setKriteria->kriteria_nama}}</th>
+	            			<th>Sub Kriteria</th>
 	            			@foreach($setKriteria->kriteria_sub as $setSubKriteria)
-	            				<th>{{$setSubKriteria->kriteria_sub_kode}}</th>
+	            			<th style="background: #3395ff;color: #fff;">{{$setSubKriteria->kriteria_sub_kode}}</th>
 	            			@endforeach
 	            			<th>Kali Sub Krit</th>
-	            			<th>Akar Pangkat Sub Krit</th>
-	            			<th>Normalisasi Bobot Sub</th>
-	            			<th>Kali Bobot Sub</th>
+	            			<th>Akar Pangkat</th>
+	            			<th>Normalisasi Bobot</th>
+	            			<th>Kali Bobot</th>
 	            		</tr>
 	            	</thead>
 	            	<tbody>
 	            		
             			@foreach($setKriteria->kriteria_sub as $setSubKriteria)
             			<tr>
-            				<th>{{$setSubKriteria->kriteria_sub_kode}}</th>
+            				<th style="background: #3395ff;color: #fff;">{{$setSubKriteria->kriteria_sub_kode}}</th>
             				@foreach($setSubKriteria->perbandingan_subkriteria as $pb_subkriteria)
-            				<th>{{$pb_subkriteria->nilai->perbandingan_nilai}}</th>
+            				<th>{{number_format($pb_subkriteria->nilai->perbandingan_nilai,3)}}</th>
             				@endforeach
-            				<th>{{$setSubKriteria->kali_krit}}</th>
-            				<th>{{$setSubKriteria->akar_krit}}</th>
-            				<th>{{$setSubKriteria->norm_bobot}}</th>
-            				<th>{{$setSubKriteria->kali_bobot}}</th>
+            				<th class="text-white" style="background:#10ac84;">{{number_format($setSubKriteria->kali_krit,3)}}</th>
+            				<th>{{number_format($setSubKriteria->akar_krit,3)}}</th>
+            				<th class="text-warning" style="background: #222f3e">{{number_format($setSubKriteria->norm_bobot,3)}}</th>
+            				<th>{{number_format($setSubKriteria->kali_bobot,3)}}</th>
             			</tr>
             			@endforeach
 	            	</tbody>
 	            </table>
-	            @endforeach
 	        </div>
+	            @endforeach
+	        
 	    </div>
 	</div>
 </div>

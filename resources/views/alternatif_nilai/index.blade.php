@@ -11,7 +11,7 @@
         </div> --}}
         {{-- <hr> --}}
         <div class="table-responsive">
-            <table class="table table-striped">
+            <table class="table table-striped text-center">
                 <thead>
                     <th>ID</th>
                     <th>Nama Alternatif</th>
@@ -29,15 +29,17 @@
                         @foreach($item->nilai_sub_kriteria as $items)
                         <td>{{ $items->alternatif_nilai }}</td>
                         @endforeach
-                        <td>
+                        <td >
+                            <div class="d-flex">
                             <a href="{{ route('alternatif_nilai.edit', [Crypt::encryptString($item->alternatif_id)]) }}"
-                                class="btn btn-primary btn-sm">Edit</a>
+                                class="btn btn-primary btn-sm mr-2">Edit</a>
                             <form action="{{ route('alternatif.destroy', [Crypt::encryptString($item->alternatif_id)]) }}"
                                 class="d-inline" method="post" onsubmit="return confirm('Pesan  hapus')">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
                             </form>
+                            </div>
                         </td>
                     </tr>
                 </tbody>

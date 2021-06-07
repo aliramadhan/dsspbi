@@ -26,7 +26,8 @@
     <style type="text/css">
     html,body,table{
         font-family: 'Poppins', sans-serif;       
-    }</style>
+    }
+    </style>
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
