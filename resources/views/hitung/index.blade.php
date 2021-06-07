@@ -28,13 +28,14 @@
 	            		@foreach($kriteria as $setKriteria)
 	            			<tr>
 	            				<th>{{$setKriteria->kriteria_kode}}</th>
-	            				@foreach($setKriteria->perbandingan_kriteria as $pb_kriteria)
+	            				@foreach($setKriteria->perbandingan_kriteria->sortBy('kriteria_id_2') as $pb_kriteria)
 	            				<th>{{$pb_kriteria->nilai->perbandingan_nilai}}</th>
 	            				@endforeach
 	            				<th>{{$setKriteria->kali_krit}}</th>
 	            				<th>{{$setKriteria->akar_krit}}</th>
 	            				<th>{{$setKriteria->norm_bobot}}</th>
 	            				<th>{{$setKriteria->kali_bobot}}</th>
+	            			</tr>
 	            		@endforeach
 	            	</tbody>
 	            </table>
