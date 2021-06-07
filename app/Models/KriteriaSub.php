@@ -22,4 +22,8 @@ class KriteriaSub extends Model
     //                             ->first();
     // }
 
+    public function perbandingan_subkriteria()
+    {
+        return $this->hasMany(PbKriteriaSub::class, 'kriteria_sub_id_1', 'kriteria_sub_id')->orderBy('kriteria_sub_id_2');
+    }
 }
