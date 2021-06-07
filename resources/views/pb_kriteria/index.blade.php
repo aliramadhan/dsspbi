@@ -9,14 +9,14 @@
             <form action="{{ route('pb_kriteria.store') }}" method="post">
                 @csrf
                 <div class="form-group">
-                    <div class="d-flex flex-row">
-                        <select name="kriteria_id_1" id="" class="form-control">
+                    <div class="d-flex flex-row p-2">
+                        <select name="kriteria_id_1" id="" class="form-control mx-2">
                             <option value="">List Kriteria</option>
                             @foreach ($kriteria as $item)
                             <option value="{{ $item->kriteria_id }}">{{ $item->kriteria_nama }}</option>
                             @endforeach
                         </select>
-                        <select name="perbandingan_id" id="" class="form-control">
+                        <select name="perbandingan_id" id="" class="form-control mx-2">
                             <option value="">List Perbandingan Kriteria</option>
                             @foreach ($pb as $item)
                             <option value="{{ $item->perbandingan_id }}">{{ $item->perbandingan_nilai }} -
@@ -24,7 +24,7 @@
                             </option>
                             @endforeach
                         </select>
-                        <select name="kriteria_id_2" id="" class="form-control">
+                        <select name="kriteria_id_2" id="" class="form-control mx-2">
                             <option value="">List Kriteria</option>
                             @foreach ($kriteria as $item)
                             <option value="{{ $item->kriteria_id }}">{{ $item->kriteria_nama }}</option>
@@ -34,7 +34,7 @@
                     </div>
                 </div>
             </form>
-            <div class="table-responsive">
+            <div class="table-responsive p-2">
                 <table class="table table-striped">
                     <thead>
                         <th></th>
