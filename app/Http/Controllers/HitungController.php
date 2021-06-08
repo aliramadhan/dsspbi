@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Kriteria;
 use App\Models\PbKriteria;
+use Illuminate\Support\Collection;
 
 class HitungController extends Controller
 {
@@ -65,6 +66,10 @@ class HitungController extends Controller
 					$listSubKriteria->kali_bobot = $listSubKriteria->norm_bobot*$listSubKriteria->jml_krit;
 				}
 			}
+		}
+		$total_kriteria = new Collection();
+		foreach ($kriteria as $setKriteria) {
+			$total_kriteria->put($setKriteria->kriteria_kode,0);
 		}
 		return view('hitung.index',compact('judul','kriteria'));
 	}

@@ -62,19 +62,27 @@ $("#show_2").click(function(){
 	            	</thead>
 	            	<tbody>
 	            		@foreach($kriteria as $setKriteria)
-	            			<tr>
-						<th style="background: #3395ff;color: #fff;">{{$setKriteria->kriteria_kode}}</th>
-	            				@foreach($setKriteria->perbandingan_kriteria as $pb_kriteria)
-	            				<th class="text-secondary">{{number_format($pb_kriteria->nilai->perbandingan_nilai,3)}}</th>
-	            				@endforeach
+            			<tr>
+							<th style="background: #3395ff;color: #fff;">{{$setKriteria->kriteria_kode}}</th>
+            				@foreach($setKriteria->perbandingan_kriteria as $pb_kriteria)
+            				<th class="text-secondary">{{number_format($pb_kriteria->nilai->perbandingan_nilai,3)}}</th>
+            				@endforeach
 
-	            				<th class="text-white" style="background:#10ac84;">{{number_format($setKriteria->kali_krit,3)}}</th>
-	            				<th class="">{{number_format($setKriteria->akar_krit,3)}}</th>
-	            				<th class="text-warning" style="background: #222f3e">{{number_format($setKriteria->norm_bobot,3)}}</th>
-	            				<th class="text-secondary">{{number_format($setKriteria->kali_bobot,3)}}</th>
-	            		
+            				<th class="text-white" style="background:#10ac84;">{{number_format($setKriteria->kali_krit,3)}}</th>
+            				<th class="">{{number_format($setKriteria->akar_krit,3)}}</th>
+            				<th class="text-warning" style="background: #222f3e">{{number_format($setKriteria->norm_bobot,3)}}</th>
+            				<th class="text-secondary">{{number_format($setKriteria->kali_bobot,3)}}</th>
+	            		</tr>
 	            		@endforeach
 	            		<tr>
+	            			<th style="background:#10ac84;">Total</th>
+	            			@foreach($kriteria as $setKriteria)
+		            			@foreach($setKriteria->perbandingan_kriteria as $pb_kriteria)
+	    							@php
+	    								
+	    							@endphp
+	            				@endforeach
+	            			@endforeach
 	            		</tr>
 	            	</tbody>
 	            </table>
