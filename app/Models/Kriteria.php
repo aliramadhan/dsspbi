@@ -20,4 +20,8 @@ class Kriteria extends Model
     {
         return $this->hasMany(PbKriteria::class, 'kriteria_id_1', 'kriteria_id')->orderBy('kriteria_id_2');
     }
+    public function kriteria_banding()
+    {
+        return $this->hasMany(PbKriteria::class, 'kriteria_id_2', 'kriteria_id')->orderBy('kriteria_id_1');
+    }
 }

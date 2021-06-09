@@ -77,12 +77,17 @@ $("#show_2").click(function(){
 	            		<tr>
 	            			<th style="background:#10ac84;">Total</th>
 	            			@foreach($kriteria as $setKriteria)
-		            			@foreach($setKriteria->perbandingan_kriteria as $pb_kriteria)
+		            			@foreach($setKriteria->kriteria_banding as $pb_kriteria)
 	    							@php
-	    								
+	    								$setKriteria->total_krit += $pb_kriteria->nilai->perbandingan_nilai;
 	    							@endphp
 	            				@endforeach
+	            				<th>{{$setKriteria->total_krit}}</th>
 	            			@endforeach
+            				<th>{{$kriteria->sum('kali_krit')}}</th>
+            				<th>{{$kriteria->sum('akar_krit')}}</th>
+            				<th>{{$kriteria->sum('norm_bobot')}}</th>
+            				<th>{{$kriteria->sum('kali_bobot')}}</th>
 	            		</tr>
 	            	</tbody>
 	            </table>
@@ -126,12 +131,96 @@ $("#show_2").click(function(){
             				<th>{{number_format($setSubKriteria->kali_bobot,3)}}</th>
             			</tr>
             			@endforeach
+            			<tr>
+	            			<th style="background:#10ac84;">Total</th>
+	            			@foreach($setKriteria->kriteria_sub as $setSubKriteria)
+		            			@foreach($setSubKriteria->subkriteria_banding as $pb_kriteria)
+	    							@php
+	    								$setSubKriteria->total_krit += $pb_kriteria->nilai->perbandingan_nilai;
+	    							@endphp
+	            				@endforeach
+	            				<th>{{$setSubKriteria->total_krit}}</th>
+	            			@endforeach
+            				<th>{{$setKriteria->kriteria_sub->sum('kali_krit')}}</th>
+            				<th>{{$setKriteria->kriteria_sub->sum('akar_krit')}}</th>
+            				<th>{{$setKriteria->kriteria_sub->sum('norm_bobot')}}</th>
+            				<th>{{$setKriteria->kriteria_sub->sum('kali_bobot')}}</th>
+            			</tr>
 	            	</tbody>
 	            </table>
 	        	</div>
 	            @endforeach
 	            </div>
-	        
+	            <table class="table text-center mb-5 ">
+	            	<thead>
+	            		<tr>
+	            			<th colspan="3">Bobot Kriteria</th>
+	            		</tr>
+	            		<tr>
+	            		@foreach($kriteria as $setKriteria)
+	            			@php
+	            				$setKriteria->color = sprintf('#%06X', mt_rand(0, 0xFFFFFF));
+	            			@endphp
+	            			<th style="background:{{$setKriteria->color}};">{{$setKriteria->kriteria_kode}} ( {{$setKriteria->kriteria_atribut}} )</th>
+	            		@endforeach
+	            		</tr>
+	            	</thead>
+	            	<tbody>
+	            		<tr>
+	            		@foreach($kriteria as $setKriteria)
+	            			<td>{{$setKriteria->norm_bobot}}</td>
+	            		@endforeach
+	            		</tr>
+	            	</tbody>
+	            	
+	            </table>
+	            <table class="table text-center mb-5 ">
+	            	<thead>
+	            		<tr>
+	            		@foreach($kriteria as $setKriteria)
+	            			@foreach($setKriteria->kriteria_sub as $setSubKriteria)
+	            				<th style="background:{{$setKriteria->color}};">{{$setSubKriteria->kriteria_sub_kode}} ( {{$setSubKriteria->kriteria_sub_atribut}} )</th>
+
+	            			@endforeach
+	            		@endforeach
+	            		</tr>
+	            	</thead>
+	            	<tbody>
+	            		<tr>
+	            		@foreach($kriteria as $setKriteria)
+	            			@foreach($setKriteria->kriteria_sub as $setSubKriteria)
+	            			@php
+	            				$setSubKriteria->bobot_global = $setSubKriteria->norm_bobot * $setKriteria->norm_bobot;
+	            			@endphp
+	            			<td>{{$setSubKriteria->norm_bobot}}</td>
+	            			@endforeach
+	            		@endforeach
+	            		</tr>
+	            	</tbody>
+	            	
+	            </table>
+	            <table class="table text-center mb-5 ">
+	            	<thead>
+	            		<tr>
+	            		@foreach($kriteria as $setKriteria)
+	            			@foreach($setKriteria->kriteria_sub as $setSubKriteria)
+	            				<th style="background:{{$setKriteria->color}};">{{$setSubKriteria->kriteria_sub_kode}} ( {{$setSubKriteria->kriteria_sub_atribut}} )</th>
+
+	            			@endforeach
+	            		@endforeach
+	            		</tr>
+	            	</thead>
+	            	<tbody>
+	            		<tr>
+	            		@foreach($kriteria as $setKriteria)
+	            			@foreach($setKriteria->kriteria_sub as $setSubKriteria)
+	            			<td>{{$setSubKriteria->bobot_global}}</td>
+	            			@endforeach
+	            		@endforeach
+	            		</tr>
+	            	</tbody>
+	            	
+	            </table>
 	    </div>
 	</div>
 </div>

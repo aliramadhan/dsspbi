@@ -26,4 +26,8 @@ class KriteriaSub extends Model
     {
         return $this->hasMany(PbKriteriaSub::class, 'kriteria_sub_id_1', 'kriteria_sub_id')->orderBy('kriteria_sub_id_2');
     }
+    public function subkriteria_banding()
+    {
+        return $this->hasMany(PbKriteriaSub::class, 'kriteria_sub_id_2', 'kriteria_sub_id')->orderBy('kriteria_sub_id_1');
+    }
 }
