@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Kriteria;
 use App\Models\PbKriteria;
+use App\Models\Alternatif;
 use Illuminate\Support\Collection;
 
 class HitungController extends Controller
@@ -12,6 +13,7 @@ class HitungController extends Controller
 	public function index(Request $request)
 	{
 		$judul = 'Hitung Thesis';
+		$alternatif = Alternatif::all();
 		$kriteria = Kriteria::orderBy('kriteria_id')->get();
 		if ($request->hitung == 'true') {
 			//Konversi nilai Kriteria
@@ -71,6 +73,6 @@ class HitungController extends Controller
 		foreach ($kriteria as $setKriteria) {
 			$total_kriteria->put($setKriteria->kriteria_kode,0);
 		}
-		return view('hitung.index',compact('judul','kriteria'));
+		return view('hitung.index',compact('judul','kriteria','alternatif'));
 	}
 }

@@ -20,4 +20,8 @@ class AlternatifNilai extends Model
     	'kriteria_sub_id',
     	'alternatif_nilai'  
     ];
+    public function sub_kriteria()
+    {
+        return $this->hasOne(KriteriaSub::class, 'kriteria_sub_id', 'kriteria_sub_id');
+    }
 }
