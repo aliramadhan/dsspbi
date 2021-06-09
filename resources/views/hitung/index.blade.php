@@ -156,6 +156,7 @@
 
 			<div class="d-flex justify-content-between align-items-center my-2 pb-2 border-bottom">
 				<h3 class="text-uppercase m-0"><b>Hasil bobot Kriteria</b></h3>
+				<button class="btn btn-primary font-weight-bold" onclick="location.reload();">Change Color</button>
 			</div> 
 			<div class="table-responsive overflow-auto mb-3">
 				<table class="table text-center table-bordered rounded-pill" >
@@ -163,7 +164,8 @@
 
 						<tr>
 							@foreach($kriteria as $setKriteria)
-							@php
+							@php							
+							
 							$setKriteria->color = sprintf('#%06X', mt_rand(0, 0xFFFFFF));
 							@endphp
 							<th style="background:{{$setKriteria->color}};" class="text-white">{{$setKriteria->kriteria_kode}} ({{$setKriteria->kriteria_atribut}})</th>
