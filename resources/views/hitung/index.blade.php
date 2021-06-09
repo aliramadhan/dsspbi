@@ -37,7 +37,9 @@
 
 
 	<div class="row row-cols-1 justify-content-center">
-		<div class="d-flex justify-content-start mb-4">
+
+		<div class="d-flex justify-content-start align-items-center mb-4 px-5 ">
+			<input class="form-control mr-4 " type="text" placeholder="V Note" aria-label="default input example">			
 			<a href="{{ route('hitung.index') }}?hitung=true" style="letter-spacing:1.5px;" class="btn btn-success shadow-sm mx-auto px-5 py-2 text-uppercase"><b>Hitung</b></a>
 		</div>
 		<div class="card card-body">
