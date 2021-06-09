@@ -242,7 +242,36 @@
 				</table>
 			</div>
 
-			
+            <!-- Table Hitung Alternatif Nilai x Sub Kriteria -->
+			<div class="d-flex justify-content-between align-items-center my-2 pb-2 border-bottom">
+				<h3 class="text-uppercase m-0"><b>Alternatif Nilai</b></h3>
+			</div> 
+			<div class="table-responsive overflow-auto mb-3">
+				<table class="table text-center table-bordered ">
+					<thead>
+	            		<tr>
+	            			<th>Alternatif</th>
+	            		@foreach($kriteria as $setKriteria)
+	            			@foreach($setKriteria->kriteria_sub as $setSubKriteria)
+	            				<th style="background:{{$setKriteria->color}};">{{$setSubKriteria->kriteria_sub_kode}} ( {{$setSubKriteria->kriteria_sub_atribut}} )</th>
+
+	            			@endforeach
+	            		@endforeach
+	            		</tr>
+	            	</thead>
+	            	<tbody>
+            			@foreach($alternatif as $setAlternatif)
+	            		<tr>
+            				<th>{{$setAlternatif->alternatif_nama}}</th>
+            				@foreach($setAlternatif->nilai_sub_kriteria as $nilaiSubKriteria)
+            					<td>{{$nilaiSubKriteria->alternatif_nilai}}</td>
+            				@endforeach
+	            		</tr>
+            			@endforeach
+	            	</tbody>
+
+				</table>
+			</div>
 
 		</div>
 
