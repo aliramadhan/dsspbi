@@ -243,64 +243,283 @@
 			</div>
 
             <!-- Table Hitung Alternatif Nilai x Sub Kriteria -->
+			
+</div>
+		<div class="card card-body mt-4">
+
 			<div class="d-flex justify-content-between align-items-center my-2 pb-2 border-bottom">
 				<h3 class="text-uppercase m-0"><b>Alternatif Nilai</b></h3>
 			</div> 
 			<div class="table-responsive overflow-auto mb-3">
-				<table class="table text-center table-bordered ">
+				<table class="table text-center table-bordered table-hover">
 					<thead>
 	            		<tr>
 	            			<th>Alternatif</th>
 	            		@foreach($kriteria as $setKriteria)
 	            			@foreach($setKriteria->kriteria_sub as $setSubKriteria)
-	            				<th style="background:{{$setKriteria->color}};">{{$setSubKriteria->kriteria_sub_kode}} ( {{$setSubKriteria->kriteria_sub_atribut}} )</th>
+	            				<th style="background:{{$setKriteria->color}};" class="text-white">{{$setSubKriteria->kriteria_sub_kode}} <br>({{$setSubKriteria->kriteria_sub_atribut}})</th>
 
 	            			@endforeach
 	            		@endforeach
 	            		</tr>
 	            	</thead>
 	            	<tbody>
+	            		@php $alter_sqrt=array();$a=0; @endphp
             			@foreach($alternatif as $setAlternatif)
 	            		<tr>
+	            			
             				<th>{{$setAlternatif->alternatif_nama}}</th>
+            				@php $b=0; @endphp
             				@foreach($setAlternatif->nilai_sub_kriteria as $nilaiSubKriteria)
-            					<td>{{$nilaiSubKriteria->alternatif_nilai}}</td>
+            					<td> {{$alter_sqrt[$a][$b]=number_format($nilaiSubKriteria->alternatif_nilai,3)}}</td>
+            					@php $b++ @endphp
             				@endforeach
+            				<br>
 	            		</tr>
+	            		@php $a++ @endphp
             			@endforeach
 	            	</tbody>
 
 				</table>
 			</div>
 
-		</div>
-
-		<div class="card card-body mt-4">
+			
 			<div class="d-flex justify-content-between align-items-center my-2 pb-2 border-bottom">
 				<h3 class="text-uppercase m-0"><b>Normalisasi alternatif MAtrix </b></h3>
 			</div> 
-		
-		<table>
 			
-		</table>
+			
+				@php $d=0;$alter_tot= array();$a=0; @endphp
+				@foreach($setAlternatif->nilai_sub_kriteria as $nilaiSubKriteria)
+				@php $c=0;$alter_tot_temp=0; @endphp
+
+				@foreach($alternatif as $setAlternatif)
+
+				@php
+				$alter_tot_temp= pow($alter_sqrt[$c][$d],2)+$alter_tot_temp;
+				$c++;			
+				@endphp
+				
+				
+				@endforeach			
+				
+
+				@php 
+				$alter_tot[$a]=sqrt(sqrt($alter_tot_temp));
+				
+				$d++;$a++; 
+				@endphp 
+
+
+				@endforeach
+
+			
+			<div class="table-responsive overflow-auto mb-3">
+				<table class="table text-center table-bordered table-hover">
+					<thead>
+						<tr>
+							<th>Alternatif</th>
+							@foreach($kriteria as $setKriteria)
+							@foreach($setKriteria->kriteria_sub as $setSubKriteria)
+							<th style="background:{{$setKriteria->color}};" class="text-white">{{$setSubKriteria->kriteria_sub_kode}} <br>({{$setSubKriteria->kriteria_sub_atribut}})</th>
+
+							@endforeach
+							@endforeach
+						</tr>
+					</thead>
+					<tbody>
+						@php $b=0;$sch_max_temp=array(); @endphp
+						@foreach($alternatif as $setAlternatif)
+
+						<tr>		
+							@php $a=0; @endphp		
+							<th>{{$setAlternatif->alternatif_nama}}</th>	
+							@php $x=0; @endphp						
+							@foreach($setAlternatif->nilai_sub_kriteria as $nilaiSubKriteria)
+							<td>{{$sch_max_temp[$b][$a]=number_format($nilaiSubKriteria->alternatif_nilai/$alter_tot[$a],3)}}</td>
+							@php $a++; @endphp			
+							@endforeach
+							@php
+												
+							$b++;
+							@endphp
+						</tr>
+						
+						@endforeach
+
+						@php $d=0;$max=array();$min=array();$a=0; @endphp
+
+						@foreach($kriteria as $setKriteria)
+							@foreach($setKriteria->kriteria_sub as $setSubKriteria)
+						@php $c=0;$sch_max=array(); @endphp
+
+						@foreach($alternatif as $setAlternatif)
+
+						@php
+						
+						$sch_max[$c]=$sch_max_temp[$c][$d];	
+						$c++;			
+						@endphp
+						
+						@endforeach					
+
+						@php 
+						
+						if($setSubKriteria->kriteria_sub_atribut=='Cost'){
+							$max[$a] = min($sch_max);
+							$min[$a] = max($sch_max);
+
+						}else{
+							$max[$a] = max($sch_max);
+							$min[$a] = min($sch_max);
+						}
+						
+						reset($sch_max);
+						$d++;$a++; 
+						@endphp 
+						@endforeach	
+						@endforeach
+
+						<tr>
+							<th>BEST</th>
+							@php $a=0; @endphp
+							@foreach($setAlternatif->nilai_sub_kriteria as $nilaiSubKriteria)
+							<th>{{$max[$a]}}</th>
+							@php $a++; @endphp
+							@endforeach
+
+						</tr>
+						<tr>
+							<th>WORST</th>
+							@php $a=0; @endphp
+							@foreach($setAlternatif->nilai_sub_kriteria as $nilaiSubKriteria)
+							<th>{{$min[$a]}}</th>
+								@php $a++; @endphp
+							@endforeach
+						</tr>
+					</tbody>
+
+				</table>
+			</div>
 
 	
 			<div class="d-flex justify-content-between align-items-center my-2 pb-2 border-bottom">
 				<h3 class="text-uppercase m-0"><b>Bobot global </b></h3>
 			</div> 
 		
-		<table>
-			
-		</table>
+			<div class="table-responsive overflow-auto mb-3">
+				<table class="table text-center table-bordered ">
+					<thead>
+						<tr>
+							<th></th>
+							@foreach($kriteria as $setKriteria)
+							@foreach($setKriteria->kriteria_sub as $setSubKriteria)
+							<th style="background:{{$setKriteria->color}};" class="text-white">{{$setSubKriteria->kriteria_sub_kode}}<br>({{$setSubKriteria->kriteria_sub_atribut}})</th>
+
+							@endforeach
+							@endforeach
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<th></th>
+							@php $bobot_gl=array();$a=0; @endphp
+							@foreach($kriteria as $setKriteria)
+							@foreach($setKriteria->kriteria_sub as $setSubKriteria)
+							<td><b>{{$bobot_gl[$a]=number_format($setSubKriteria->bobot_global,5)}}</b></td>
+							@php $a++ @endphp
+							@endforeach
+							@endforeach
+						</tr>
+						<tr>
+							<th>BEST</th>
+							@php $a=0; @endphp
+							@foreach($setAlternatif->nilai_sub_kriteria as $nilaiSubKriteria)
+							<th>{{$max[$a]}}</th>
+							@php $a++; @endphp
+							@endforeach
+
+						</tr>
+						<tr>
+							<th>WORST</th>
+							@php $a=0; @endphp
+							@foreach($setAlternatif->nilai_sub_kriteria as $nilaiSubKriteria)
+							<th>{{$min[$a]}}</th>
+								@php $a++; @endphp
+							@endforeach
+						</tr>
+					</tbody>
+
+				</table>
+			</div>
 
 		
 			<div class="d-flex justify-content-between align-items-center my-2 pb-2 border-bottom">
 				<h3 class="text-uppercase m-0 text-secondary"><b>Perhitungan <span class="text-dark">utility measure </span></b></h3>
+
 			</div> 
 		
-		<table>
-			
-		</table>
+		<div class="table-responsive overflow-auto">
+				<table class="table text-center table-bordered table-hover">
+					<thead>
+						<tr>
+							<th>Alternatif</th>
+							@foreach($kriteria as $setKriteria)
+							@foreach($setKriteria->kriteria_sub as $setSubKriteria)
+							<th style="background:{{$setKriteria->color}};" class="text-white">{{$setSubKriteria->kriteria_sub_kode}} <br>({{$setSubKriteria->kriteria_sub_atribut}})</th>
+
+							@endforeach
+							@endforeach
+							<th>Si</th>
+							<th>Ri</th>
+							<th>Qi</th>
+							<th>Rank</th>
+						</tr>
+	            	</thead>
+	            	<tbody>
+	            		@php $x=0; @endphp	
+            			@foreach($alternatif as $setAlternatif)
+	            		<tr>		
+							@php $a=0;$hum=array();$si=0;$ri=array() @endphp		
+							<th>{{$setAlternatif->alternatif_nama}}</th>	
+												
+							@foreach($setAlternatif->nilai_sub_kriteria as $nilaiSubKriteria)
+							<td>
+									{{$bobot_gl[$a]}}*(({{$max[$a]}}-{{number_format($nilaiSubKriteria->alternatif_nilai/$alter_tot[$a],3)}})/({{$min[$a]}}-{{number_format($nilaiSubKriteria->alternatif_nilai/$alter_tot[$a],3)}}))<br>
+									
+									@php
+									$ht_max = $max[$a]-($nilaiSubKriteria->alternatif_nilai/$alter_tot[$a]);
+									$ht_min = $min[$a]-($nilaiSubKriteria->alternatif_nilai/$alter_tot[$a]);
+									$ht_bg = $ht_max/$ht_min;
+									$si=$bobot_gl[$a]*$ht_bg+$si;
+									$ri[$a]=$bobot_gl[$a]*$ht_bg;
+									@endphp
+									{{ 
+										$hum[$a]=number_format($bobot_gl[$a]*$ht_bg,5)
+									
+									}}
+							</td>
+
+						
+
+							@php $a++; @endphp			
+							@endforeach
+							@php
+													
+							
+							@endphp
+							<td>{{number_format($si,5)}}</td>
+							<td>{{number_format(max($ri),3)}}</td>
+							<td>qi</td>
+							<td>rank</td>
+						</tr>
+						
+	            		@php $x++;reset($ri) @endphp
+            			@endforeach
+	            	</tbody>
+
+				</table>
+			</div>
 
 	</div>
 </div>
