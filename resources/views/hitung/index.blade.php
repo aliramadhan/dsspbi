@@ -584,7 +584,7 @@
 							($v*(((double)$si_kal[$x] - (double)$max_print_si)/$p_2))+((1-$v)*(((double)$ri_kal[$x]-(double)$min_print_si)/$p_3));							
 							@endphp
 
-							<td>($v*(({{$si_kal[$x]}} - {{$max_print_si}})/({{$max_print_si}}-{{$min_print_si}})))+((1-$v)*(({{$ri_kal[$x]}}-{{$min_print_si}})/({{$min_print_ri}}-{{$max_print_ri}}))) <b>{{abs($rank[$x])}}</b></td>
+							<td>({{$v}}*(({{$si_kal[$x]}} - {{$max_print_si}})/({{$max_print_si}}-{{$min_print_si}})))+((1-{{$v}})*(({{$ri_kal[$x]}}-{{$min_print_si}})/({{$min_print_ri}}-{{$max_print_ri}}))) <b>{{abs($rank[$x])}}</b></td>
 
 							
 						
