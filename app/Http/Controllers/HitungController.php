@@ -69,6 +69,92 @@ class HitungController extends Controller
 				}
 			}
 		}
+		//set ukuran matrix kriteria
+		switch ($kriteria->count()) {
+			case 1:
+				$listKriteria->matrix_kriteria = 0;
+				break;
+			case 2:
+				$listKriteria->matrix_kriteria = 0;
+				break;
+			case 3:
+				$listKriteria->matrix_kriteria = 0.58;
+				break;
+			case 4:
+				$listKriteria->matrix_kriteria = 0.9;
+				break;
+			case 5:
+				$listKriteria->matrix_kriteria = 1.12;
+				break;
+			case 6:
+				$listKriteria->matrix_kriteria = 1.24;
+				break;
+			case 7:
+				$listKriteria->matrix_kriteria = 1.32;
+				break;
+			case 8:
+				$listKriteria->matrix_kriteria = 1.42;
+				break;
+			case 9:
+				$listKriteria->matrix_kriteria = 1.45;
+				break;
+			case 10:
+				$listKriteria->matrix_kriteria = 1.48;
+				break;
+			case 11:
+				$listKriteria->matrix_kriteria = 1.51;
+				break;
+			
+			default:
+				# code...
+				break;
+		}
+		//matrix sub kriteria
+		switch ($listKriteria->kriteria_sub->count()) {
+			case 1:
+				$listKriteria->matrix_sub_kriteria = 0;
+				break;
+			case 2:
+				$listKriteria->matrix_sub_kriteria = 0;
+				break;
+			case 3:
+				$listKriteria->matrix_sub_kriteria = 0.58;
+				break;
+			case 4:
+				$listKriteria->matrix_sub_kriteria = 0.9;
+				break;
+			case 5:
+				$listKriteria->matrix_sub_kriteria = 1.12;
+				break;
+			case 6:
+				$listKriteria->matrix_sub_kriteria = 1.24;
+				break;
+			case 7:
+				$listKriteria->matrix_sub_kriteria = 1.32;
+				break;
+			case 8:
+				$listKriteria->matrix_sub_kriteria = 1.42;
+				break;
+			case 9:
+				$listKriteria->matrix_sub_kriteria = 1.45;
+				break;
+			case 10:
+				$listKriteria->matrix_sub_kriteria = 1.48;
+				break;
+			case 11:
+				$listKriteria->matrix_sub_kriteria = 1.51;
+				break;
+			
+			default:
+				# code...
+				break;
+		}
+		//hitung CI/CR
+		$listKriteria->ci = ($kriteria->sum('kali_bobot') - $kriteria->count())/($kriteria->count() - 1);;
+		$listKriteria->cr = $listKriteria->ci/$listKriteria->matrix_kriteria;;
+
+		$listKriteria->ci_sub = ($listKriteria->kriteria_sub->sum('kali_bobot') - $listKriteria->kriteria_sub->count())/($listKriteria->kriteria_sub->count() - 1);
+		$listKriteria->cr_sub = $listKriteria->ci_sub/$listKriteria->matrix_sub_kriteria;
 		$total_kriteria = new Collection();
 		foreach ($kriteria as $setKriteria) {
 			$total_kriteria->put($setKriteria->kriteria_kode,0);
