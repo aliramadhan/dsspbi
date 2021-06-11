@@ -294,22 +294,27 @@
 				@php $c=0;$alter_tot_temp=0; @endphp
 
 				@foreach($alternatif as $setAlternatif)
-
-				@php
-				$alter_tot_temp= pow($alter_sqrt[$c][$d],2)+$alter_tot_temp;
-				$c++;			
-				@endphp
 				
+				@php
+				//numeric problem
+				$alter_sqrt_num = $alter_sqrt[$c][$d];
+				$tempt_sqrt=is_numeric($alter_sqrt_num);
+				$alter_tot_temp= ($tempt_sqrt^2)+$alter_tot_temp;
+				$c++;			
+
+				@endphp
+				{{$tempt_sqrt}}
+
 				
 				@endforeach			
 				
 
 				@php 
 				$alter_tot[$a]=sqrt(sqrt($alter_tot_temp));
-				
-				$d++;$a++; 
+				$alter_tot_temp=0;
+				$d++;$a++;
 				@endphp 
-
+			
 
 				@endforeach
 
@@ -336,7 +341,14 @@
 							<th>{{$setAlternatif->alternatif_nama}}</th>	
 							@php $x=0; @endphp						
 							@foreach($setAlternatif->nilai_sub_kriteria as $nilaiSubKriteria)
-							<td>{{$sch_max_temp[$b][$a]=number_format($nilaiSubKriteria->alternatif_nilai/$alter_tot[$a],3)}}</td>
+							@php 
+							if($alter_tot[$a] <= 0)
+							{ 
+								$sch_max_temp[$b][$a]=0;
+							}else{
+								$sch_max_temp[$b][$a]=number_format($nilaiSubKriteria->alternatif_nilai/$alter_tot[$a],3);
+							} @endphp
+							<td>{{$sch_max_temp[$b][$a]}} {{$a}}{{$b}}</td>
 							@php $a++; @endphp			
 							@endforeach
 							@php
@@ -477,45 +489,117 @@
 						</tr>
 	            	</thead>
 	            	<tbody>
-	            		@php $x=0; @endphp	
+	            		@php $x=0;$si_kal=array();$ri_kal=array();$rank=array();
+	            		$max_print_si=0;
+	            		$max_print_ri=0;
+	            		$min_print_si=0;
+	            		$min_print_ri=0;
+	            		 @endphp	
             			@foreach($alternatif as $setAlternatif)
 	            		<tr>		
-							@php $a=0;$hum=array();$si=0;$ri=array() @endphp		
+							@php $a=0;$hum=array();$si=0;$ri=array(); @endphp		
 							<th>{{$setAlternatif->alternatif_nama}}</th>	
 												
 							@foreach($setAlternatif->nilai_sub_kriteria as $nilaiSubKriteria)
 							<td>
-									{{$bobot_gl[$a]}}*(({{$max[$a]}}-{{number_format($nilaiSubKriteria->alternatif_nilai/$alter_tot[$a],3)}})/({{$min[$a]}}-{{number_format($nilaiSubKriteria->alternatif_nilai/$alter_tot[$a],3)}}))<br>
+									@php
+									if(($nilaiSubKriteria->alternatif_nilai<=0)OR($alter_tot[$a]<=0)){
+										$alternatif_nilaiZero=0;
+									}else{
+										$alternatif_nilaiZero=$nilaiSubKriteria->alternatif_nilai/$alter_tot[$a];
+									}
+									@endphp
+									{{$bobot_gl[$a]}}*(({{$max[$a]}}-{{number_format($alternatif_nilaiZero,3)}})/({{$min[$a]}}-{{number_format($alternatif_nilaiZero,3)}}))<br>
 									
 									@php
-									$ht_max = $max[$a]-($nilaiSubKriteria->alternatif_nilai/$alter_tot[$a]);
-									$ht_min = $min[$a]-($nilaiSubKriteria->alternatif_nilai/$alter_tot[$a]);
-									$ht_bg = $ht_max/$ht_min;
+									$maxNum=$max[$a];
+									$minNum=$min[$a];
+									$ht_max = is_numeric($maxNum)-($alternatif_nilaiZero);
+									$ht_min = is_numeric($minNum)-($alternatif_nilaiZero);
+									if(($ht_max<=0)OR($ht_min<=0)){
+										$ht_bg = 0;
+									}else{
+										$ht_bg = $ht_max/$ht_min;
+									}
+									
 									$si=$bobot_gl[$a]*$ht_bg+$si;
 									$ri[$a]=$bobot_gl[$a]*$ht_bg;
 									@endphp
-									{{ 
-										$hum[$a]=number_format($bobot_gl[$a]*$ht_bg,5)
-									
-									}}
+									<b>
+									{{ $hum[$a]=number_format($bobot_gl[$a]*$ht_bg,5) }}
+									</b>
 							</td>
 
 						
 
 							@php $a++; @endphp			
 							@endforeach
-							@php
-													
+
 							
+							<td>{{$si_kal[$x]=number_format($si,3)}}</td>
+							<td>{{$ri_kal[$x]=number_format(max($ri),3)}}</td>
+
+							@php													
+							$max_print_si=max($si_kal);
+							$max_print_ri=max($ri_kal);
+							$min_print_si=min($si_kal);
+							$min_print_ri=min($ri_kal);
+							
+							
+							$p_2=(is_numeric($max_print_si)-is_numeric($min_print_si));							
+							$p_3=(is_numeric($min_print_ri)-is_numeric($max_print_ri));
+
+							if($p_2 <= 0){
+								$p_2=0;
+							}else if($p_3 <= 0){
+								$p_3=0;
+							
+							}
+
+							$rank[$x]=
+							(0.5*((is_numeric($si_kal[$x]) - is_numeric($max_print_si))))+((1-0.5)*((is_numeric($ri_kal[$x])-is_numeric($min_print_si))));							
 							@endphp
-							<td>{{number_format($si,5)}}</td>
-							<td>{{number_format(max($ri),3)}}</td>
-							<td>qi</td>
-							<td>rank</td>
-						</tr>
+
+							<td>(0.5*(({{$si_kal[$x]}} - {{$max_print_si}})/({{$max_print_si}}-{{$min_print_si}})))+((1-0.5)*(({{$ri_kal[$x]}}-{{$min_print_si}})/({{$min_print_ri}}-{{$max_print_ri}}))) <b>{{abs($rank[$x])}}</b></td>
+
+							
+
+							
+
 						
 	            		@php $x++;reset($ri) @endphp
+	            		</tr>
             			@endforeach
+
+            			@php
+							$ordered_values = $rank;
+							rsort($ordered_values);
+
+							foreach ($rank as $key => $rank) {
+								foreach ($ordered_values as $ordered_key => $ordered_value) {
+									if ($rank === $ordered_value) {
+										$key = $ordered_key;
+										break;
+									}
+								}
+								echo '<td>'. ((int) $key + 1) . '</td>';
+							
+							
+							}
+							@endphp
+
+            			<tr class="font-weight-bold">
+            				<td colspan="{{$a}}"></td>
+            				<td>S*,R*</td>
+            				<td>{{$max_print_si}}</td>
+            				<td>{{$max_print_ri}}</td>
+            			</tr>
+            			<tr class="font-weight-bold">
+            				<td  colspan="{{$a}}"></td>
+            				<td >S-,R-</td>
+            				<td>{{$min_print_si}}</td>
+            				<td>{{$min_print_ri}}</td>
+            			</tr>
 	            	</tbody>
 
 				</table>
