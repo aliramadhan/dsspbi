@@ -39,12 +39,15 @@
 	<div class="row row-cols-1 justify-content-center">
 
 		<div class="d-flex justify-content-start align-items-center mb-4 px-5 ">
-			<input class="form-control mr-4 " type="text" placeholder="V Note" aria-label="default input example">			
-			<a href="{{ route('hitung.index') }}?hitung=true" style="letter-spacing:1.5px;" class="btn btn-success shadow-sm mx-auto px-5 py-2 text-uppercase"><b>Hitung</b></a>
+			<form action="{{ route('hitung.index') }}?hitung=true">
+			@csrf
+			<input class="form-control mr-4 " type="text" placeholder="V Note" name="v" aria-label="default input example">			
+			<input type="submit" name="submit" value="Hitung"  style="letter-spacing:1.5px;" class="btn btn-success shadow-sm mx-auto px-5 py-2 text-uppercase">
+			</form>
 		</div>
 		<div class="card card-body">
 			<div class="d-flex justify-content-between align-items-center my-2 pb-2 border-bottom">
-				<h3 class="text-uppercase m-0"><b>Hasil konversi nilai perbandingan berpasangan</b></h3>
+				<h3 class="text-uppercase m-0"><b>Hasil konversi nilai perbandingan berpasangan V = {{$v}}</b></h3>
 				<input type="button" id="show_1" class="btn btn-secondary fw-bolder text-uppercase px-5" style="letter-spacing:1.5px;font-weight: 700;" value="sembunyikan">
 			</div>  
 			<div class="table-responsive " id="show_1_x">
@@ -96,12 +99,12 @@
 						<tr>
 							<td colspan="{{$cs+3}}"></td>
 							<td>CI</td>
-							<td>{{$setKriteria->ci}}</td>
+							<td>{{$setKriteria->ci}} 1</td>
 						</tr>
 						<tr>
 							<td colspan="{{$cs+3}}"></td>
 							<td>CR</td>
-							<td>{{$setKriteria->cr}}</td>
+							<td>{{$setKriteria->cr}} 1</td>
 						</tr>
 					</tbody>
 				</table>
@@ -297,7 +300,7 @@
             					<td> {{$alter_sqrt[$a][$b]=number_format($nilaiSubKriteria->alternatif_nilai,3)}}</td>
             					@php $b++ @endphp
             				@endforeach
-            			
+            				<br>
 	            		</tr>
 	            		@php $a++ @endphp
             			@endforeach
@@ -369,7 +372,7 @@
 							
 							$sch_max_temp[$b][$a]=number_format($nilaiSubKriteria->alternatif_nilai/$alter_tot[$a],3);
 							 @endphp
-							<td>{{$sch_max_temp[$b][$a]}}</td>
+							<td>{{$sch_max_temp[$b][$a]}} {{$a}}{{$b}}</td>
 							@php $a++; @endphp			
 							@endforeach
 							@php
@@ -524,38 +527,36 @@
 							@foreach($setAlternatif->nilai_sub_kriteria as $nilaiSubKriteria)
 							<td>
 									@php
-								
-									$alternatif_nilaiZero=(double)$nilaiSubKriteria->alternatif_nilai/$alter_tot[$a];
-									
+									if(($nilaiSubKriteria->alternatif_nilai<=0)OR($alter_tot[$a]<=0)){
+										$alternatif_nilaiZero=0;
+									}else{
+										$alternatif_nilaiZero=$nilaiSubKriteria->alternatif_nilai/$alter_tot[$a];
+									}
 									@endphp
 									{{$bobot_gl[$a]}}*(({{$max[$a]}}-{{number_format($alternatif_nilaiZero,3)}})/({{$min[$a]}}-{{number_format($alternatif_nilaiZero,3)}}))<br>
 									
 									@php
 									$maxNum=$max[$a];
 									$minNum=$min[$a];
-
 									$ht_max = (double)$maxNum-($alternatif_nilaiZero);
 									$ht_min = (double)$minNum-($alternatif_nilaiZero);
-
+									if(($ht_max<=0)OR($ht_min<=0)){
+										$ht_bg = $ht_max;
+									}else{
+										$ht_bg = $ht_max/$ht_min;
+									}
 									
-									$ht_bg = $ht_max/$ht_min;
-									
-									
-									
+									$si=$bobot_gl[$a]*$ht_bg+$si;
 									$ri[$a]=$bobot_gl[$a]*$ht_bg;
 									@endphp
 									<b>
-										{{$hum[$a]=number_format(abs($bobot_gl[$a]*(((double)$max[$a]-$alternatif_nilaiZero)/((double)$min[$a]-(double)$max[$a]))),4)}}
-
+										@format($hum[$a]=$bobot_gl[$a]*$ht_bg)
 									</b>
 							</td>
 
 						
 
-							@php 
-							$si=$hum[$a]+$si;
-							$a++; 
-							@endphp			
+							@php $a++; @endphp			
 							@endforeach
 
 							
@@ -580,15 +581,25 @@
 							(0.5*(((double)$si_kal[$x] - (double)$max_print_si)/$p_2))+((1-0.5)*(((double)$ri_kal[$x]-(double)$min_print_si)/$p_3));							
 							@endphp
 
-							<td>(0.5*(({{$si_kal[$x]}} - {{$max_print_si}})/({{$max_print_si}}-{{$min_print_si}})))+((1-0.5)*(({{$ri_kal[$x]}}-{{$min_print_si}})/({{$min_print_ri}}-{{$max_print_ri}}))) <b>{{abs($rank[$x])}}</b></td>
+							<td>(0.5*(({{$si_kal[$x]}} - {{$max_print_si}})/({{$max_print_si}}-{{$min_print_si}})))+((1-0.5)*(({{$ri_kal[$x]}}-{{$min_print_si}})/({{$min_print_ri}}-{{$max_print_ri}}))) <b>@format(abs($rank[$x]))</b></td>
 
 							
+
+							
+
 						
 	            		@php $x++;reset($ri) @endphp
 	            		
             			@endforeach
             					</tr>
             			
+            			
+							
+							
+						
+            			
+
+
             			<tr class="font-weight-bold">
             				<td colspan="{{$a}}"></td>
             				<td>S*,R*</td>
@@ -604,7 +615,6 @@
             			
             			@php
 							$ordered_values = $rank;
-							$alterCount = count($rank);
 							rsort($ordered_values);
 
 							foreach ($rank as $key => $rank) {
@@ -614,7 +624,7 @@
 										break;
 									}
 								}
-								echo '<td rowspan="2">'. ((int) $alterCount-$key ) . '</td>';
+								echo '<td rowspan="2">'. ((int) $key + 1) . '</td>';
 							
 							
 							}
