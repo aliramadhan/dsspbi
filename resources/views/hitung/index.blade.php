@@ -34,7 +34,12 @@
 }
 </style>
 <div class="container">
-
+	@if ($message = Session::get('message'))
+	<div class="alert alert-warning alert-block">
+	    <button type="button" class="close" data-dismiss="alert">×</button>    
+	    <strong>{{ $message }}</strong>
+	</div>
+	@endif
 
 	<div class="row row-cols-1 justify-content-center">
 
@@ -580,7 +585,7 @@
 							$p_2=1;
 							$p_3=1;
 
-							$rank[$x]=
+							$setAlternatif->nilai_rank = $rank[$x]=
 							($v*(((double)$si_kal[$x] - (double)$max_print_si)/$p_2))+((1-$v)*(((double)$ri_kal[$x]-(double)$min_print_si)/$p_3));							
 							@endphp
 
@@ -606,23 +611,13 @@
             				<td>{{$min_print_ri}}</td>
             			</tr>
             			
-            			@php
-							$ordered_values = $rank;
-							$alterCount = count($rank);
-							rsort($ordered_values);
-
-							foreach ($rank as $key => $rank) {
-								foreach ($ordered_values as $ordered_key => $ordered_value) {
-									if ($rank === $ordered_value) {
-										$key = $ordered_key;
-										break;
-									}
-								}
-								echo '<td rowspan="2">'. ((int) $alterCount-$key ) . '</td>';
-							
-							
-							}
-							@endphp
+						@foreach($alternatif->sortByDesc('nilai_rank') as $setAlternatif)
+							<tr>
+								<td>{{$setAlternatif->alternatif_nama}}</td>
+								<td>{{$setAlternatif->nilai_rank}}</td>
+								<td>{{$loop->iteration}}</td>
+							</tr>
+						@endforeach
 							
 
             				

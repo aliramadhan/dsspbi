@@ -24,6 +24,9 @@ class HitungController extends Controller
 			foreach ($kriteria as $listKriteria) {
 				$listKriteria->kali_krit = 1;
 				//get kali krit
+				if ($listKriteria->perbandingan_kriteria->count() < $kriteria->count()) {
+					return redirect()->back()->with(['message' => 'Tolong lengkapi data Kriteria.']);
+				}
 				foreach($listKriteria->perbandingan_kriteria as $pb_kriteria){
 					$listKriteria->kali_krit *= $pb_kriteria->nilai->perbandingan_nilai;
 				}
@@ -49,6 +52,9 @@ class HitungController extends Controller
 			foreach ($kriteria as $listKriteria) {
 				//Konversi nilai Kriteria
 				foreach ($listKriteria->kriteria_sub as $listSubKriteria) {
+					if ($listSubKriteria->perbandingan_subkriteria->count() < $listKriteria->kriteria_sub->count()) {
+						return redirect()->back()->with(['message' => 'Tolong lengkapi data Sub Kriteria.']);
+					}
 					$listSubKriteria->kali_krit = 1;
 					//get kali krit
 					foreach($listSubKriteria->perbandingan_subkriteria as $pb_subkriteria){
