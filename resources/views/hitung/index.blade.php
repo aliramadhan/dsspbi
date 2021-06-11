@@ -32,6 +32,10 @@
 .table thead th {
 	vertical-align: middle !important;
 }
+.bg-warning{
+	background-color: #c8d6e5 !important
+
+}
 </style>
 <div class="container">
 	@if ($message = Session::get('message'))
@@ -102,16 +106,21 @@
 							<th class="bg-secondary">{{number_format($kriteria->sum('norm_bobot'),3)}}</th>
 							<th class="bg-secondary">{{number_format($kriteria->sum('kali_bobot'),3)}}</th>
 						</tr>
-						<tr>
+						<tr class="font-weight-bold ">
 							<td colspan="{{$cs+3}}"></td>
-							<td>CI</td>
-							<td>{{$setKriteria->ci}}</td>
+							<td class="bg-warning">CI</td>
+							<td >{{$setKriteria->ci}}</td>
 						</tr>
-						<tr>
+						<tr class="font-weight-bold ">
 							<td colspan="{{$cs+3}}"></td>
-							<td>CR</td>
-							<td>{{$setKriteria->cr}}</td>
+							<td class="bg-warning">CR</td>
+							<td >{{$setKriteria->cr}}</td>
 						</tr>
+						<tr class="font-weight-bold ">
+								<td colspan="{{$cs+3}}"></td>
+								<td style="background:#ff9f43">< 0,1 ?</td>
+								<td style="background:#ff9f43">@if($setKriteria->cr<0.1) TRUE @else FALSE @endif</td>
+							</tr>
 					</tbody>
 				</table>
 			</div>
@@ -141,7 +150,7 @@
 							</tr>
 						</thead>
 						<tbody>
-
+							@php $cs=0; @endphp
 							@foreach($setKriteria->kriteria_sub as $setSubKriteria)
 							<tr>
 								<th style="background: #3395ff;color: #fff;">{{$setSubKriteria->kriteria_sub_kode}}</th>
@@ -153,7 +162,7 @@
 								<th class="text-warning" style="background: #222f3e">{{number_format($setSubKriteria->norm_bobot,3)}}</th>
 								<th>{{number_format($setSubKriteria->kali_bobot,3)}}</th>
 							</tr>
-
+							@php $cs++; @endphp
 							@endforeach
 							<tr>
 								<th style="background: #576574;" class="text-white">Total</th>
@@ -170,15 +179,20 @@
 								<th class="bg-secondary">{{number_format($setKriteria->kriteria_sub->sum('norm_bobot'),3)}}</th>
 								<th class="bg-secondary">{{number_format($setKriteria->kriteria_sub->sum('kali_bobot'),3)}}</th>
 							</tr>
-							<tr>
-								<td colspan="3"></td>
-								<td>CI</td>
-								<td>{{$setKriteria->ci_sub}}</td>
+							<tr class="font-weight-bold ">
+								<td colspan="{{$cs+3}}"></td>
+								<td class="bg-warning">CI</td>
+								<td >{{$setKriteria->ci_sub}}</td>
 							</tr>
-							<tr>
-								<td colspan="3"></td>
-								<td>CR</td>
-								<td>{{$setKriteria->cr_sub}}</td>
+							<tr class="font-weight-bold ">
+								<td colspan="{{$cs+3}}"></td>
+								<td class="bg-warning">CR</td>
+								<td >{{$setKriteria->cr_sub}}</td>
+							</tr>
+							<tr class="font-weight-bold ">
+								<td colspan="{{$cs+3}}"></td>
+								<td style="background:#ff9f43">< 0,1 ?</td>
+								<td style="background:#ff9f43">@if($setKriteria->cr_sub<0.1) TRUE @else FALSE @endif</td>
 							</tr>
 						</tbody>
 					</table>
@@ -515,7 +529,7 @@
 							<th>Si</th>
 							<th>Ri</th>
 							<th>Qi</th>
-							<th>Rank</th>
+							
 						</tr>
 	            	</thead>
 	            	<tbody>
@@ -599,25 +613,18 @@
             					</tr>
             			
             			<tr class="font-weight-bold">
-            				<td colspan="{{$a}}"></td>
-            				<td>S*,R*</td>
-            				<td>{{$max_print_si}}</td>
-            				<td>{{$max_print_ri}}</td>
+            				<td colspan="{{$a+1}}"></td>
+            				<td class="bg-warning">S*,R*</td>
+            				<td class="bg-warning">{{$max_print_si}}</td>
+            				<td class="bg-warning">{{$max_print_ri}}</td>
             			</tr>
             			<tr class="font-weight-bold">
-            				<td  colspan="{{$a}}"></td>
-            				<td >S-,R-</td>
-            				<td>{{$min_print_si}}</td>
-            				<td>{{$min_print_ri}}</td>
+            				<td  colspan="{{$a+1}}"></td>
+            				<td class="bg-warning">S-,R-</td>
+            				<td class="bg-warning">{{$min_print_si}}</td>
+            				<td class="bg-warning">{{$min_print_ri}}</td>
             			</tr>
             			
-						@foreach($alternatif->sortByDesc('nilai_rank') as $setAlternatif)
-							<tr>
-								<td>{{$setAlternatif->alternatif_nama}}</td>
-								<td>{{$setAlternatif->nilai_rank}}</td>
-								<td>{{$loop->iteration}}</td>
-							</tr>
-						@endforeach
 							
 
             				
@@ -626,6 +633,19 @@
 
 	            	</tbody>
 
+				</table>
+			</div>
+			<h3 class="text-uppercase mt-5 text-secondary"><b>Perankingan <span class="text-dark">alternatif</span></b></h3>
+				<div class="table-responsive overflow-auto">
+				<table class="table text-center table-bordered table-hover">
+					
+						@foreach($alternatif->sortBy('nilai_rank') as $setAlternatif)
+							<tr>
+								<td>{{$setAlternatif->alternatif_nama}}</td>
+								<td>{{abs($setAlternatif->nilai_rank)}}</td>
+								<td>{{$loop->iteration}}</td>
+							</tr>
+						@endforeach
 				</table>
 			</div>
 
